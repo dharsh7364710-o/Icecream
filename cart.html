@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Deva M Mart - Cart</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#eaf6ff;
+color:#123;
+}
+
+header{
+background:#1976d2;
+color:white;
+padding:18px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+}
+
+header h1{
+margin:0;
+}
+
+nav{
+display:flex;
+gap:20px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+.container{
+max-width:1100px;
+margin:30px auto;
+padding:20px;
+}
+
+.container>h1{
+color:#1976d2;
+}
+
+.cart-item{
+background:white;
+border-radius:15px;
+padding:18px;
+margin-bottom:18px;
+display:flex;
+align-items:center;
+gap:25px;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+.cart-item img{
+width:130px;
+height:110px;
+object-fit:cover;
+border-radius:12px;
+display:block;
+}
+
+.details{
+flex:1;
+}
+
+.details h2{
+margin:0 0 10px;
+}
+
+.price{
+font-size:18px;
+font-weight:bold;
+color:#1976d2;
+}
+
+.subtotal{
+margin-top:8px;
+}
+
+.quantity{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.quantity button{
+width:38px;
+height:38px;
+border:0;
+border-radius:8px;
+background:#5270b5;
+color:white;
+font-size:22px;
+cursor:pointer;
+}
+
+.quantity span{
+font-size:18px;
+font-weight:bold;
+}
+
+.remove{
+background:#b86b63;
+color:white;
+border:0;
+padding:11px 18px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.summary{
+background:white;
+border-radius:15px;
+padding:25px;
+margin-top:25px;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+text-align:right;
+}
+
+.summary h2{
+color:#5270b5;
+}
+
+.continue{
+background:#24834b;
+color:white;
+border:0;
+padding:13px 25px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+margin-right:10px;
+}
+
+.place{
+background:#5270b5;
+color:white;
+border:0;
+padding:13px 25px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.empty{
+background:white;
+padding:60px 20px;
+text-align:center;
+border-radius:15px;
+font-size:22px;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+@media(max-width:700px){
+
+header{
+flex-direction:column;
+gap:15px;
+}
+
+.cart-item{
+flex-direction:column;
+text-align:center;
+}
+
+.details{
+width:100%;
+}
+
+.quantity{
+justify-content:center;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🍦 Deva EMart</h1>
+
+<nav>
+
+<a href="./products.html">🏠 Home</a>
+
+<a href="./cart.html">🛒 Cart</a>
+
+<a href="./orders.html">📦 Orders</a>
+
+</nav>
+
+</header>
+
+<div class="container">
+
+<h1>🛒 Your Cart</h1>
+
+<div id="cartContainer"></div>
+
+<div class="summary" id="summary" style="display:none">
+
+<h2>
+Total: ₹<span id="total">0</span>
+</h2>
+
+<button
+class="continue"
+type="button"
+onclick="continueShopping()">
+Continue Shopping
+</button>
+
+<button
+class="place"
+type="button"
+onclick="placeOrder()">
+Place Order
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let cart=
+JSON.parse(localStorage.getItem("devaEMartCart"))||[];
+
+function displayCart(){
+
+let container=
+document.getElementById("cartContainer");
+
+let summary=
+document.getElementById("summary");
+
+container.innerHTML="";
+
+if(cart.length===0){
+
+summary.style.display="none";
+
+container.innerHTML=`
+
+<div class="empty">
+
+🛒 Your Cart is Empty!
+
+<br><br>
+
+<button
+class="continue"
+type="button"
+onclick="continueShopping()">
+Continue Shopping 🍦
+</button>
+
+</div>
+
+`;
+
+return;
+
+}
+
+summary.style.display="block";
+
+let total=0;
+
+cart.forEach(function(item,index){
+
+let quantity=item.quantity||1;
+
+let price=Number(item.price)||0;
+
+let subtotal=price*quantity;
+
+total+=subtotal;
+
+container.innerHTML+=`
+
+<div class="cart-item">
+
+<img
+src="${item.image}"
+alt="${item.name}"
+onerror="this.style.display='none'"
+>
+
+<div class="details">
+
+<h2>${item.name}</h2>
+
+<div class="price">
+₹${price}
+</div>
+
+<div class="subtotal">
+Subtotal: ₹${subtotal}
+</div>
+
+</div>
+
+<div class="quantity">
+
+<button onclick="decrease(${index})">
+−
+</button>
+
+<span>${quantity}</span>
+
+<button onclick="increase(${index})">
++
+</button>
+
+</div>
+
+<button
+class="remove"
+onclick="removeItem(${index})">
+Remove
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("total").innerText=total;
+
+localStorage.setItem(
+"devaEMartCart",
+JSON.stringify(cart)
+);
+
+}
+
+function increase(index){
+
+cart[index].quantity=
+(cart[index].quantity||1)+1;
+
+saveCart();
+
+}
+
+function decrease(index){
+
+if((cart[index].quantity||1)>1){
+
+cart[index].quantity--;
+
+}else{
+
+cart.splice(index,1);
+
+}
+
+saveCart();
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+saveCart();
+
+}
+
+function saveCart(){
+
+localStorage.setItem(
+"devaEMartCart",
+JSON.stringify(cart)
+);
+
+displayCart();
+
+}
+
+function continueShopping(){
+
+window.location.assign("./products.html");
+
+}
+
+function placeOrder(){
+
+if(cart.length===0){
+
+alert("Your cart is empty!");
+
+return;
+
+}
+
+let orders=
+JSON.parse(
+localStorage.getItem("devaEMartOrders")
+)||[];
+
+cart.forEach(function(item){
+
+orders.push({
+
+name:item.name,
+
+price:item.price,
+
+image:item.image,
+
+quantity:item.quantity||1,
+
+status:"Order Placed"
+
+});
+
+});
+
+localStorage.setItem(
+"devaEMartOrders",
+JSON.stringify(orders)
+);
+
+alert(
+"Order placed successfully! 🍦🎉"
+);
+
+cart=[];
+
+localStorage.setItem(
+"devaEMartCart",
+JSON.stringify(cart)
+);
+
+window.location.assign("./orders.html");
+
+}
+
+displayCart();
+
+</script>
+
+</body>
+</html>
