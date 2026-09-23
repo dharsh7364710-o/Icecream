@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Deva M Mart - Ice Cream Shop</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#eaf6ff;
+color:#123;
+}
+
+header{
+background:#1976d2;
+color:white;
+padding:18px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+}
+
+header h1{
+margin:0;
+}
+
+nav{
+display:flex;
+gap:20px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+.hero{
+text-align:center;
+padding:30px 20px;
+}
+
+.hero h2{
+color:#1976d2;
+font-size:30px;
+margin:10px;
+}
+
+.hero p{
+font-size:17px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.card{
+background:white;
+border-radius:18px;
+padding:15px;
+box-shadow:0 4px 12px #bbb;
+text-align:center;
+}
+
+.card img{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:15px;
+display:block;
+}
+
+.card h3{
+font-size:20px;
+margin:15px 0 8px;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+color:#1976d2;
+margin-bottom:15px;
+}
+
+button{
+border:0;
+padding:11px 15px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+margin:4px;
+}
+
+.cart-btn{
+background:#43a047;
+color:white;
+}
+
+.buy-btn{
+background:#1976d2;
+color:white;
+}
+
+@media(max-width:900px){
+.products{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+@media(max-width:600px){
+.products{
+grid-template-columns:1fr;
+}
+
+header{
+gap:15px;
+}
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🍦 Welcome to Deva EMart</h1>
+
+<nav>
+<a href="./products.html">🏠 Home</a>
+<a href="./cart.html">🛒 Cart</a>
+<a href="./orders.html">📦 Orders</a>
+</nav>
+
+</header>
+
+<div class="hero">
+
+<h2>Active Ice Creams 🍨</h2>
+
+<p>
+Discover a world of creamy, delicious and refreshing ice creams.
+Choose your favourite flavour, add it to your cart and enjoy a sweet treat anytime!
+</p>
+
+</div>
+
+<div class="container">
+
+<div class="products" id="products"></div>
+
+</div>
+
+<script>
+
+const products=[
+
+{
+name:"Mango Ice Cream",
+price:120,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Mango_ice-cream.jpg"
+},
+
+{
+name:"Strawberry Ice Cream",
+price:120,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Strawberry_ice-cream.jpg"
+},
+
+{
+name:"Chocolate Ice Cream",
+price:130,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/2019-09-21_16_28_10_Chocolate_gelato_from_The_Chocolatorium_along_Old_Mill_Road_in_the_East_Arlington_section_of_Arlington,_Bennington_County,_Vermont.jpg"
+},
+
+{
+name:"Vanilla Ice Cream",
+price:100,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/VanillaIceCream.jpg"
+},
+
+{
+name:"Pistachio Ice Cream",
+price:140,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Pistachio_ice_cream.jpg"
+},
+
+{
+name:"Blackcurrant Ice Cream",
+price:130,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Kawiarnia_Gniezno_Rynem_Misz-Masz.jpg"
+},
+
+{
+name:"Cookies & Cream",
+price:140,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_and_cream.JPG"
+},
+
+{
+name:"Butterscotch Ice Cream",
+price:130,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Butterscotch_icecream.jpg"
+},
+
+{
+name:"Kulfi",
+price:110,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Kulfi_ice_cream.jpg"
+},
+
+{
+name:"Blueberry Ice Cream",
+price:140,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blueberry_ice_cream_cone_(8745182597).jpg"
+},
+
+{
+name:"Pista Almond Ice Cream",
+price:150,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Almond_Kulfi.jpg"
+},
+
+{
+name:"Tender Coconut Ice Cream",
+price:140,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Tender_coconut_icecream.jpg"
+},
+
+{
+name:"Coffee Ice Cream",
+price:130,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Coffee_ice-cream_at_siri_mane.jpg"
+},
+
+{
+name:"Caramel Ice Cream",
+price:140,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Salted_caramel_ice_cream_(26314112816).jpg"
+},
+
+{
+name:"Red Velvet Ice Cream",
+price:150,
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Ice_Cream_iPhone.jpg"
+}
+
+];
+
+let cart=
+JSON.parse(localStorage.getItem("devaEMartCart"))||[];
+
+function displayProducts(){
+
+let container=document.getElementById("products");
+
+container.innerHTML="";
+
+products.forEach((product,index)=>{
+
+container.innerHTML+=`
+
+<div class="card">
+
+<img
+src="${product.image}"
+alt="${product.name}"
+loading="lazy"
+onerror="this.src='https://via.placeholder.com/500x350?text=Ice+Cream'"
+>
+
+<h3>${product.name}</h3>
+
+<div class="price">
+₹${product.price}
+</div>
+
+<button
+class="cart-btn"
+onclick="addToCart(${index})">
+🛒 Add to Cart
+</button>
+
+<button
+class="buy-btn"
+onclick="buyNow(${index})">
+⚡ Buy Now
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+function addToCart(index){
+
+let product=products[index];
+
+let existing=cart.find(
+item=>item.name===product.name
+);
+
+if(existing){
+
+existing.quantity++;
+
+}else{
+
+cart.push({
+
+name:product.name,
+price:product.price,
+image:product.image,
+quantity:1
+
+});
+
+}
+
+localStorage.setItem(
+"devaEMartCart",
+JSON.stringify(cart)
+);
+
+alert(
+"DevaMMart: "+
+product.name+
+" added to cart successfully! 🍦🛒"
+);
+
+}
+
+function buyNow(index){
+
+let product=products[index];
+
+let buyProduct={
+
+name:product.name,
+price:product.price,
+image:product.image,
+quantity:1
+
+};
+
+localStorage.setItem(
+"devaEMartBuyNow",
+JSON.stringify(buyProduct)
+);
+
+window.location.href="./buy-now.html";
+
+}
+
+displayProducts();
+
+</script>
+
+</body>
+</html>
