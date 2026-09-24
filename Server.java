@@ -33,15 +33,18 @@ public class Server {
 
     static void cors(HttpExchange exchange) {
         exchange.getResponseHeaders().add(
-            "Access-Control-Allow-Origin", "*"
+            "Access-Control-Allow-Origin",
+            "*"
         );
 
         exchange.getResponseHeaders().add(
-            "Access-Control-Allow-Methods", "POST, OPTIONS"
+            "Access-Control-Allow-Methods",
+            "POST, OPTIONS"
         );
 
         exchange.getResponseHeaders().add(
-            "Access-Control-Allow-Headers", "Content-Type"
+            "Access-Control-Allow-Headers",
+            "Content-Type"
         );
     }
 
@@ -70,10 +73,11 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
 
-        HttpServer server = HttpServer.create(
-            new InetSocketAddress(8080),
-            0
-        );
+        HttpServer server =
+            HttpServer.create(
+                new InetSocketAddress(8080),
+                0
+            );
 
         server.createContext("/register", exchange -> {
 
@@ -100,31 +104,61 @@ public class Server {
 
             try {
 
-                String data = new String(
-                    exchange.getRequestBody().readAllBytes(),
-                    StandardCharsets.UTF_8
-                );
+                String data =
+                    new String(
+                        exchange.getRequestBody().readAllBytes(),
+                        StandardCharsets.UTF_8
+                    );
 
                 Map<String,String> form =
                     parseForm(data);
 
-                String role = form.get("role");
-                String name = form.get("name");
-                String email = form.get("email");
-                String phone = form.get("phone");
-                String shopName = form.get("shopName");
-                String adminId = form.get("adminId");
-                String password = form.get("password");
+                String role =
+                    form.get("role");
+
+                String name =
+                    form.get("name");
+
+                String email =
+                    form.get("email");
+
+                String phone =
+                    form.get("phone");
+
+                String shopName =
+                    form.get("shopName");
+
+                String adminId =
+                    form.get("adminId");
+
+                String password =
+                    form.get("password");
+
+                if (role == null ||
+                    name == null ||
+                    email == null ||
+                    password == null) {
+
+                    send(
+                        exchange,
+                        400,
+                        "Required details missing"
+                    );
+
+                    return;
+                }
 
                 Connection con =
                     DBC.getConnection();
 
                 if (con == null) {
+
                     send(
                         exchange,
                         500,
                         "Database connection failed"
                     );
+
                     return;
                 }
 
@@ -192,56 +226,84 @@ public class Server {
 
             try {
 
-                String data = new String(
-                    exchange.getRequestBody().readAllBytes(),
-                    StandardCharsets.UTF_8
-                );
+                String data =
+                    new String(
+                        exchange.getRequestBody().readAllBytes(),
+                        StandardCharsets.UTF_8
+                    );
 
                 Map<String,String> form =
                     parseForm(data);
 
-                String role = form.get("role");
-                String email = form.get("email");
-                String password = form.get("password");
+                String role =
+                    form.get("role");
+
+                String email =
+                    form.get("email");
+
+                String password =
+                    form.get("password");
+
+                if (role == null ||
+                    email == null ||
+                    password == null) {
+
+                    send(
+                        exchange,
+                        400,
+                        "Login details missing"
+                    );
+
+                    return;
+                }
 
                 Connection con =
                     DBC.getConnection();
 
                 if (con == null) {
+
                     send(
                         exchange,
                         500,
                         "Database connection failed"
                     );
+
                     return;
                 }
 
                 String sql =
-                    "SELECT name, role FROM users " +
-                    "WHERE email=? AND password=? AND role=?";
+                    "SELECT name,role " +
+                    "FROM users " +
+                    "WHERE LOWER(email)=LOWER(?) " +
+                    "AND password=? " +
+                    "AND UPPER(role)=UPPER(?)";
 
                 PreparedStatement ps =
                     con.prepareStatement(sql);
 
-                ps.setString(1, email);
+                ps.setString(1, email.trim());
                 ps.setString(2, password);
-                ps.setString(3, role);
+                ps.setString(3, role.trim());
 
                 ResultSet rs =
                     ps.executeQuery();
 
                 if (rs.next()) {
 
-                    String response =
-                        "Login Successful!|" +
-                        rs.getString("name") +
-                        "|" +
+                    String name =
+                        rs.getString("name");
+
+                    String databaseRole =
                         rs.getString("role");
 
                     send(
                         exchange,
                         200,
-                        response
+                        "Login Successful!" +
+                        "|" +
+                        name +
+                        "|" +
+                        databaseRole.toUpperCase()
                     );
 
                 } else {
