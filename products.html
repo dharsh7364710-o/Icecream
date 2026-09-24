@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Deva M Mart - Ice Cream Shop</title>
+<title>DevaMMart - Ice Cream Shop</title>
 
 <style>
 *{
@@ -27,6 +27,7 @@ flex-wrap:wrap;
 
 header h1{
 margin:0;
+font-size:26px;
 }
 
 nav{
@@ -81,6 +82,7 @@ height:220px;
 object-fit:cover;
 border-radius:15px;
 display:block;
+background:#eaf6ff;
 }
 
 .card h3{
@@ -114,6 +116,10 @@ background:#1976d2;
 color:white;
 }
 
+button:hover{
+opacity:.85;
+}
+
 @media(max-width:900px){
 .products{
 grid-template-columns:repeat(2,1fr);
@@ -137,23 +143,23 @@ gap:15px;
 
 <header>
 
-<h1>🍦 Welcome to Deva EMart</h1>
+<h1>🍦 Welcome to DevaMMart</h1>
 
 <nav>
-<a href="./products.html">🏠 Home</a>
-<a href="./cart.html">🛒 Cart</a>
-<a href="./orders.html">📦 Orders</a>
+<a href="products.html">🏠 Home</a>
+<a href="cart.html">🛒 Cart</a>
+<a href="orders.html">📦 Orders</a>
 </nav>
 
 </header>
 
 <div class="hero">
 
-<h2>Active Ice Creams 🍨</h2>
+<h2>Our Ice Creams 🍨</h2>
 
 <p>
-Discover a world of creamy, delicious and refreshing ice creams.
-Choose your favourite flavour, add it to your cart and enjoy a sweet treat anytime!
+Discover delicious and refreshing ice creams.
+Choose your favourite flavour and enjoy!
 </p>
 
 </div>
@@ -169,93 +175,108 @@ Choose your favourite flavour, add it to your cart and enjoy a sweet treat anyti
 const products=[
 
 {
+id:1,
 name:"Mango Ice Cream",
 price:120,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Mango_ice-cream.jpg"
+image:"https://images.unsplash.com/photo-1629385701021-fcd568a743e8?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:2,
 name:"Strawberry Ice Cream",
 price:120,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Strawberry_ice-cream.jpg"
+image:"https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:3,
 name:"Chocolate Ice Cream",
 price:130,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/2019-09-21_16_28_10_Chocolate_gelato_from_The_Chocolatorium_along_Old_Mill_Road_in_the_East_Arlington_section_of_Arlington,_Bennington_County,_Vermont.jpg"
+image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:4,
 name:"Vanilla Ice Cream",
 price:100,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/VanillaIceCream.jpg"
+image:"https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:5,
 name:"Pistachio Ice Cream",
 price:140,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Pistachio_ice_cream.jpg"
+image:"https://images.unsplash.com/photo-1587563974670-5d1e8f5a6f8f?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:6,
 name:"Blackcurrant Ice Cream",
 price:130,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Kawiarnia_Gniezno_Rynem_Misz-Masz.jpg"
+image:"https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:7,
 name:"Cookies & Cream",
 price:140,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_and_cream.JPG"
+image:"https://images.unsplash.com/photo-1589710751893-f9a6770ad71b?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:8,
 name:"Butterscotch Ice Cream",
 price:130,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Butterscotch_icecream.jpg"
+image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:9,
 name:"Kulfi",
 price:110,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Kulfi_ice_cream.jpg"
+image:"https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:10,
 name:"Blueberry Ice Cream",
 price:140,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blueberry_ice_cream_cone_(8745182597).jpg"
+image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:11,
 name:"Pista Almond Ice Cream",
 price:150,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Almond_Kulfi.jpg"
+image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:12,
 name:"Tender Coconut Ice Cream",
 price:140,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Tender_coconut_icecream.jpg"
+image:"https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:13,
 name:"Coffee Ice Cream",
 price:130,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Coffee_ice-cream_at_siri_mane.jpg"
+image:"https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:14,
 name:"Caramel Ice Cream",
 price:140,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Salted_caramel_ice_cream_(26314112816).jpg"
+image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"
 },
 
 {
+id:15,
 name:"Red Velvet Ice Cream",
 price:150,
-image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Ice_Cream_iPhone.jpg"
+image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
 }
 
 ];
@@ -265,7 +286,8 @@ JSON.parse(localStorage.getItem("devaEMartCart"))||[];
 
 function displayProducts(){
 
-let container=document.getElementById("products");
+const container=
+document.getElementById("products");
 
 container.innerHTML="";
 
@@ -278,8 +300,7 @@ container.innerHTML+=`
 <img
 src="${product.image}"
 alt="${product.name}"
-loading="lazy"
-onerror="this.src='https://via.placeholder.com/500x350?text=Ice+Cream'"
+onerror="this.src='https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80'"
 >
 
 <h3>${product.name}</h3>
@@ -310,11 +331,10 @@ onclick="buyNow(${index})">
 
 function addToCart(index){
 
-let product=products[index];
+const product=products[index];
 
-let existing=cart.find(
-item=>item.name===product.name
-);
+const existing=
+cart.find(item=>item.name===product.name);
 
 if(existing){
 
@@ -323,12 +343,11 @@ existing.quantity++;
 }else{
 
 cart.push({
-
+id:product.id,
 name:product.name,
 price:product.price,
 image:product.image,
 quantity:1
-
 });
 
 }
@@ -339,7 +358,6 @@ JSON.stringify(cart)
 );
 
 alert(
-"DevaMMart: "+
 product.name+
 " added to cart successfully! 🍦🛒"
 );
@@ -348,15 +366,14 @@ product.name+
 
 function buyNow(index){
 
-let product=products[index];
+const product=products[index];
 
-let buyProduct={
-
+const buyProduct={
+id:product.id,
 name:product.name,
 price:product.price,
 image:product.image,
 quantity:1
-
 };
 
 localStorage.setItem(
@@ -364,7 +381,7 @@ localStorage.setItem(
 JSON.stringify(buyProduct)
 );
 
-window.location.href="./buy-now.html";
+window.location.href="buy-now.html";
 
 }
 
