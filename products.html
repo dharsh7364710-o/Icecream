@@ -1,393 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>DevaMMart - Ice Cream Shop</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Deva M Mart - Ice Cream Shop</title>
 <style>
-*{
-box-sizing:border-box;
-}
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#eaf6ff;
-color:#123;
-}
-
-header{
-background:#1976d2;
-color:white;
-padding:18px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-}
-
-header h1{
-margin:0;
-font-size:26px;
-}
-
-nav{
-display:flex;
-gap:20px;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-font-weight:bold;
-}
-
-.hero{
-text-align:center;
-padding:30px 20px;
-}
-
-.hero h2{
-color:#1976d2;
-font-size:30px;
-margin:10px;
-}
-
-.hero p{
-font-size:17px;
-}
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:20px;
-}
-
-.products{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:25px;
-}
-
-.card{
-background:white;
-border-radius:18px;
-padding:15px;
-box-shadow:0 4px 12px #bbb;
-text-align:center;
-}
-
-.card img{
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:15px;
-display:block;
-background:#eaf6ff;
-}
-
-.card h3{
-font-size:20px;
-margin:15px 0 8px;
-}
-
-.price{
-font-size:20px;
-font-weight:bold;
-color:#1976d2;
-margin-bottom:15px;
-}
-
-button{
-border:0;
-padding:11px 15px;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-margin:4px;
-}
-
-.cart-btn{
-background:#43a047;
-color:white;
-}
-
-.buy-btn{
-background:#1976d2;
-color:white;
-}
-
-button:hover{
-opacity:.85;
-}
-
-@media(max-width:900px){
-.products{
-grid-template-columns:repeat(2,1fr);
-}
-}
-
-@media(max-width:600px){
-.products{
-grid-template-columns:1fr;
-}
-
-header{
-gap:15px;
-}
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eaf6ff;color:#123}
+header{background:#1976d2;color:white;padding:18px 30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+header h1{margin:0;font-size:26px}
+nav{display:flex;gap:20px}
+nav a{color:white;text-decoration:none;font-weight:bold}
+.hero{text-align:center;padding:30px 20px}
+.hero h2{color:#1976d2;font-size:30px;margin:10px}
+.hero p{font-size:17px}
+.container{max-width:1200px;margin:auto;padding:20px}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}
+.card{background:white;border-radius:18px;padding:15px;box-shadow:0 4px 12px #bbb;text-align:center}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:15px;display:block;background:#eaf6ff}
+.card h3{font-size:20px;margin:15px 0 8px}
+.price{font-size:20px;font-weight:bold;color:#1976d2;margin-bottom:15px}
+button{border:0;padding:11px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin:4px}
+.cart-btn{background:#43a047;color:white}
+.buy-btn{background:#1976d2;color:white}
+button:hover{opacity:.85}
+#notice{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#218838;color:white;padding:15px 22px;border-radius:10px;font-weight:bold;z-index:10;text-align:center;max-width:90%;box-shadow:0 4px 12px #999}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.products{grid-template-columns:1fr}header{gap:15px}header h1{font-size:22px}}
 </style>
-
 </head>
-
 <body>
 
 <header>
-
-<h1>🍦 Welcome to DevaMMart</h1>
-
+<h1>🍦 Welcome to Deva M Mart</h1>
 <nav>
 <a href="products.html">🏠 Home</a>
 <a href="cart.html">🛒 Cart</a>
 <a href="orders.html">📦 Orders</a>
 </nav>
-
 </header>
 
 <div class="hero">
-
 <h2>Our Ice Creams 🍨</h2>
-
-<p>
-Discover delicious and refreshing ice creams.
-Choose your favourite flavour and enjoy!
-</p>
-
+<p>Discover delicious and refreshing ice creams. Choose your favourite flavour and enjoy!</p>
 </div>
 
 <div class="container">
-
 <div class="products" id="products"></div>
-
 </div>
+
+<div id="notice" role="status" aria-live="polite"></div>
 
 <script>
-
 const products=[
-
-{
-id:1,
-name:"Mango Ice Cream",
-price:120,
-image:"https://images.unsplash.com/photo-1629385701021-fcd568a743e8?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:2,
-name:"Strawberry Ice Cream",
-price:120,
-image:"https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:3,
-name:"Chocolate Ice Cream",
-price:130,
-image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:4,
-name:"Vanilla Ice Cream",
-price:100,
-image:"https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:5,
-name:"Pistachio Ice Cream",
-price:140,
-image:"https://images.unsplash.com/photo-1587563974670-5d1e8f5a6f8f?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:6,
-name:"Blackcurrant Ice Cream",
-price:130,
-image:"https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:7,
-name:"Cookies & Cream",
-price:140,
-image:"https://images.unsplash.com/photo-1589710751893-f9a6770ad71b?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:8,
-name:"Butterscotch Ice Cream",
-price:130,
-image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:9,
-name:"Kulfi",
-price:110,
-image:"https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:10,
-name:"Blueberry Ice Cream",
-price:140,
-image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:11,
-name:"Pista Almond Ice Cream",
-price:150,
-image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:12,
-name:"Tender Coconut Ice Cream",
-price:140,
-image:"https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:13,
-name:"Coffee Ice Cream",
-price:130,
-image:"https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:14,
-name:"Caramel Ice Cream",
-price:140,
-image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-id:15,
-name:"Red Velvet Ice Cream",
-price:150,
-image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
-}
-
+{id:1,name:"Mango Ice Cream",price:120,image:"https://images.unsplash.com/photo-1501446529957-6226bd447c46?auto=format&fit=crop&w=800&q=80"},
+{id:2,name:"Strawberry Ice Cream",price:120,image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"},
+{id:3,name:"Chocolate Ice Cream",price:130,image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"},
+{id:4,name:"Vanilla Ice Cream",price:100,image:"https://images.unsplash.com/photo-1560008581-09826d1de69e?auto=format&fit=crop&w=800&q=80"},
+{id:5,name:"Pistachio Ice Cream",price:140,image:"https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?auto=format&fit=crop&w=800&q=80"},
+{id:6,name:"Blackcurrant Ice Cream",price:130,image:"https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=800&q=80"},
+{id:7,name:"Cookies & Cream",price:140,image:"https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=800&q=80"},
+{id:8,name:"Butterscotch Ice Cream",price:130,image:"https://images.unsplash.com/photo-1488900128323-21503983a07e?auto=format&fit=crop&w=800&q=80"},
+{id:9,name:"Kulfi Ice Cream",price:110,image:"https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80"},
+{id:10,name:"Blueberry Ice Cream",price:140,image:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80"},
+{id:11,name:"Pista Almond Ice Cream",price:150,image:"https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?auto=format&fit=crop&w=800&q=80"},
+{id:12,name:"Tender Coconut Ice Cream",price:140,image:"https://images.unsplash.com/photo-1488900128323-21503983a07e?auto=format&fit=crop&w=800&q=80"},
+{id:13,name:"Coffee Ice Cream",price:130,image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"},
+{id:14,name:"Caramel Ice Cream",price:140,image:"https://images.unsplash.com/photo-1560008581-09826d1de69e?auto=format&fit=crop&w=800&q=80"},
+{id:15,name:"Red Velvet Ice Cream",price:150,image:"https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=800&q=80"}
 ];
 
-let cart=
-JSON.parse(localStorage.getItem("devaEMartCart"))||[];
+const CART_KEY="devaEMartCart";
+const notice=document.getElementById("notice");
 
-function displayProducts(){
+function getCart(){
+try{
+return JSON.parse(localStorage.getItem(CART_KEY))||[];
+}catch(error){
+return [];
+}
+}
 
-const container=
-document.getElementById("products");
-
-container.innerHTML="";
-
-products.forEach((product,index)=>{
-
-container.innerHTML+=`
-
-<div class="card">
-
-<img
-src="${product.image}"
-alt="${product.name}"
-onerror="this.src='https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=800&q=80'"
->
-
-<h3>${product.name}</h3>
-
-<div class="price">
-₹${product.price}
-</div>
-
-<button
-class="cart-btn"
-onclick="addToCart(${index})">
-🛒 Add to Cart
-</button>
-
-<button
-class="buy-btn"
-onclick="buyNow(${index})">
-⚡ Buy Now
-</button>
-
-</div>
-
-`;
-
-});
-
+function showNotice(text){
+notice.textContent=text;
+notice.style.display="block";
+clearTimeout(window.noticeTimer);
+window.noticeTimer=setTimeout(()=>notice.style.display="none",2500);
 }
 
 function addToCart(index){
-
 const product=products[index];
-
-const existing=
-cart.find(item=>item.name===product.name);
+const cart=getCart();
+const existing=cart.find(item=>item.id===product.id);
 
 if(existing){
-
-existing.quantity++;
-
+existing.quantity=(existing.quantity||1)+1;
 }else{
-
-cart.push({
-id:product.id,
-name:product.name,
-price:product.price,
-image:product.image,
-quantity:1
-});
-
+cart.push({...product,quantity:1});
 }
 
-localStorage.setItem(
-"devaEMartCart",
-JSON.stringify(cart)
-);
-
-alert(
-product.name+
-" added to cart successfully! 🍦🛒"
-);
-
+localStorage.setItem(CART_KEY,JSON.stringify(cart));
+showNotice(product.name+" added to cart successfully! 🛒");
 }
 
 function buyNow(index){
-
 const product=products[index];
+localStorage.setItem("devaEMartBuyNow",JSON.stringify({...product,quantity:1}));
+window.location.href="buy-now.html";
+}
 
-const buyProduct={
-id:product.id,
-name:product.name,
-price:product.price,
-image:product.image,
-quantity:1
+function displayProducts(){
+const container=document.getElementById("products");
+
+products.forEach((product,index)=>{
+const card=document.createElement("div");
+card.className="card";
+
+const image=document.createElement("img");
+image.src=product.image;
+image.alt=product.name;
+image.loading="lazy";
+image.onerror=function(){
+this.onerror=null;
+this.src="https://placehold.co/600x400/eaf6ff/1976d2?text="+encodeURIComponent(product.name);
 };
 
-localStorage.setItem(
-"devaEMartBuyNow",
-JSON.stringify(buyProduct)
-);
+const name=document.createElement("h3");
+name.textContent=product.name;
 
-window.location.href="buy-now.html";
+const price=document.createElement("div");
+price.className="price";
+price.textContent="₹"+product.price;
 
+const cartButton=document.createElement("button");
+cartButton.className="cart-btn";
+cartButton.textContent="🛒 Add to Cart";
+cartButton.addEventListener("click",()=>addToCart(index));
+
+const buyButton=document.createElement("button");
+buyButton.className="buy-btn";
+buyButton.textContent="⚡ Buy Now";
+buyButton.addEventListener("click",()=>buyNow(index));
+
+card.append(image,name,price,cartButton,buyButton);
+container.appendChild(card);
+});
 }
 
 displayProducts();
-
 </script>
-
 </body>
 </html>
