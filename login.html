@@ -1,164 +1,271 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>DevaMMart Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Deva M Mart - Login</title>
 <style>
-*{box-sizing:border-box}
-body{
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
 font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#b3e5fc,#e1f5fe);
+}
+body{
 min-height:100vh;
 display:flex;
 justify-content:center;
-align-items:center
+align-items:center;
+background:linear-gradient(135deg,#e3f2fd,#90caf9,#42a5f5);
+padding:20px;
 }
 .container{
-width:400px;
+width:100%;
+max-width:430px;
 background:white;
 padding:30px;
-border-radius:20px;
-box-shadow:0 8px 25px rgba(0,0,0,.2)
+border-radius:18px;
+box-shadow:0 8px 25px #0002;
 }
-h1{text-align:center;color:#1976d2}
-h2{text-align:center;color:#555}
-label{display:block;margin-top:15px;font-weight:bold}
+.logo{
+text-align:center;
+font-size:29px;
+font-weight:bold;
+color:#1565c0;
+margin-bottom:10px;
+}
+.subtitle{
+text-align:center;
+color:#666;
+margin-bottom:25px;
+}
+h2{
+text-align:center;
+color:#222;
+margin-bottom:20px;
+}
+label{
+display:block;
+font-weight:bold;
+margin:16px 0 8px;
+}
 input,select{
 width:100%;
-padding:12px;
-margin-top:7px;
+padding:13px;
 border:1px solid #bbb;
 border-radius:8px;
-font-size:15px
+font-size:15px;
+background:white;
+}
+input:focus,select:focus{
+outline:2px solid #64b5f6;
+border-color:#1976d2;
 }
 button{
 width:100%;
 padding:13px;
-margin-top:22px;
-border:0;
-border-radius:8px;
+margin-top:23px;
 background:#1976d2;
 color:white;
-font-size:16px;
-cursor:pointer
-}
-.register{text-align:center;margin-top:18px}
-.register a{
-color:#1976d2;
+border:0;
+border-radius:8px;
+font-size:17px;
 font-weight:bold;
-text-decoration:none
+cursor:pointer;
+}
+button:hover{
+background:#0d47a1;
+}
+.message{
+display:none;
+margin-top:18px;
+padding:13px;
+border-radius:8px;
+text-align:center;
+font-weight:bold;
+overflow-wrap:anywhere;
+}
+.success{
+display:block;
+background:#d4edda;
+color:#155724;
+}
+.error{
+display:block;
+background:#f8d7da;
+color:#721c24;
+}
+.register{
+text-align:center;
+margin-top:22px;
+color:#555;
+}
+.register a{
+color:#1565c0;
+font-weight:bold;
+text-decoration:none;
+}
+.register a:hover{
+text-decoration:underline;
+}
+.forgot{
+display:block;
+text-align:right;
+margin-top:12px;
+font-size:14px;
+}
+.forgot a{
+color:#1565c0;
+text-decoration:none;
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-<h1>🍦 DevaMMart</h1>
-<h2>Login</h2>
+<div class="logo">🍦 Deva M Mart</div>
+<p class="subtitle">Your Favourite Ice Cream Store</p>
 
-<form id="loginForm">
+<h2>Login to Your Account</h2>
 
-<label>Login As</label>
+<form id="loginForm" autocomplete="off">
 
+<label for="role">Select Your Role</label>
 <select id="role" required>
-<option value="">Select Role</option>
-<option value="BUYER">Buyer</option>
-<option value="SELLER">Seller</option>
-<option value="ADMIN">Admin</option>
+<option value="" selected disabled>-- Select Role --</option>
+<option value="buyer">Buyer</option>
+<option value="seller">Seller</option>
+<option value="admin">Admin</option>
 </select>
 
-<label>Email</label>
-<input type="email" id="email" required>
+<label for="email">Email Address</label>
+<input
+type="email"
+id="email"
+placeholder="Enter your registered email"
+autocomplete="off"
+required
+>
 
-<label>Password</label>
-<input type="password" id="password" required>
+<label for="password">Password</label>
+<input
+type="password"
+id="password"
+placeholder="Enter your password"
+autocomplete="new-password"
+required
+>
 
-<button type="submit">Login</button>
+<a class="forgot" href="forgot-password.html">Forgot Password?</a>
+
+<button type="submit" id="loginButton">Login</button>
 
 </form>
 
-<div class="register">
-New user?
-<a href="register.html">Register</a>
-</div>
+<div id="message" class="message" role="status" aria-live="polite"></div>
+
+<p class="register">
+Don't have an account?
+<a href="register.html">Register Now</a>
+</p>
 
 </div>
 
 <script>
+const loginForm=document.getElementById("loginForm");
+const message=document.getElementById("message");
+const loginButton=document.getElementById("loginButton");
 
-document.getElementById("loginForm").addEventListener("submit",async function(e){
+loginForm.addEventListener("submit",function(event){
+event.preventDefault();
 
-e.preventDefault();
+const role=document.getElementById("role").value;
+const email=document.getElementById("email").value.trim().toLowerCase();
+const password=document.getElementById("password").value;
 
-let role=document.getElementById("role").value;
-let email=document.getElementById("email").value.trim();
-let password=document.getElementById("password").value;
+if(!role||!email||!password){
+showMessage("Please fill in all the fields.","error");
+return;
+}
 
-let data=
-"role="+encodeURIComponent(role)+
-"&email="+encodeURIComponent(email)+
-"&password="+encodeURIComponent(password);
+let users=[];
 
 try{
-
-let response=await fetch("http://localhost:8080/login",{
-method:"POST",
-headers:{
-"Content-Type":"application/x-www-form-urlencoded"
-},
-body:data
-});
-
-let result=await response.text();
-
-if(response.ok && result.startsWith("Login Successful")){
-
-let parts=result.split("|");
-
-localStorage.setItem("userName",parts[1]);
-localStorage.setItem("userRole",parts[2]);
-localStorage.setItem("userEmail",email);
-
-if(parts[2]==="BUYER"){
-
-window.location.href="./products.html";
-
+users=JSON.parse(localStorage.getItem("devaMMartUsers"))||[];
+}catch(error){
+showMessage("Unable to read registered accounts. Please register again.","error");
+return;
 }
 
-else if(parts[2]==="SELLER"){
-
-window.location.href="./seller.html";
-
+if(!Array.isArray(users)){
+showMessage("Registered account data is invalid. Please register again.","error");
+return;
 }
 
-else if(parts[2]==="ADMIN"){
+const user=users.find(function(existing){
 
-window.location.href="./admin.html";
-
+if(!existing||existing.role!==role){
+return false;
 }
 
+let registeredEmail="";
+let registeredPassword="";
+
+if(role==="buyer"){
+registeredEmail=existing.buyerEmail;
+registeredPassword=existing.buyerPassword;
+}else if(role==="seller"){
+registeredEmail=existing.sellerEmail;
+registeredPassword=existing.sellerPassword;
+}else if(role==="admin"){
+registeredEmail=existing.adminEmail;
+registeredPassword=existing.adminPassword;
 }
 
-else{
-
-alert(result);
-
-}
-
-}
-
-catch(error){
-
-alert("Backend server is not running!");
-
-console.log(error);
-
-}
+return typeof registeredEmail==="string"&&
+typeof registeredPassword==="string"&&
+registeredEmail.trim().toLowerCase()===email&&
+registeredPassword===password;
 
 });
 
+if(!user){
+showMessage("Invalid email or password for the selected role. Please check your registered details.","error");
+return;
+}
+
+localStorage.setItem("devaMMartCurrentUser",JSON.stringify(user));
+
+let userName="";
+let destination="";
+
+if(role==="buyer"){
+userName=user.buyerName;
+destination="products.html";
+}else if(role==="seller"){
+userName=user.sellerName;
+destination="seller-dashboard.html";
+}else if(role==="admin"){
+userName=user.adminName;
+destination="admin.html";
+}
+
+showMessage("Login Successful! Welcome "+(userName||role)+"!","success");
+
+loginButton.disabled=true;
+loginButton.textContent="Login Successful...";
+
+setTimeout(function(){
+window.location.href=destination;
+},1000);
+
+});
+
+function showMessage(text,type){
+message.textContent=text;
+message.className="message "+type;
+}
 </script>
 
 </body>
