@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Deva M Mart - Seller Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f0f6ff;color:#263238}
+header{background:#1565c0;color:white;padding:20px 30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{font-size:25px}
+.layout{display:flex;min-height:calc(100vh - 70px)}
+.sidebar{width:235px;background:white;padding:22px 15px;box-shadow:2px 0 10px #00000010}
+.sidebar h3{color:#1565c0;margin-bottom:20px}
+.sidebar button{display:block;width:100%;text-align:left;padding:13px;margin-bottom:9px;border:0;border-radius:8px;background:#eaf2ff;color:#174ea6;font-weight:bold;cursor:pointer}
+.sidebar button:hover{background:#1565c0;color:white}
+main{flex:1;padding:25px;min-width:0}
+.welcome{background:linear-gradient(120deg,#dbeafe,#bfdbfe);padding:25px;border-radius:15px;margin-bottom:25px}
+.welcome h2{color:#174ea6;margin-bottom:10px}
+.section{display:none;background:white;padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 3px 12px #0000000c}
+.section h2{color:#1565c0;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:25px}
+.stat{background:white;padding:22px;border-radius:12px;box-shadow:0 3px 12px #0000000c}
+.stat h3{font-size:15px;color:#666;margin-bottom:12px}
+.stat p{font-size:25px;color:#1565c0;font-weight:bold}
+label{display:block;margin:14px 0 7px;font-weight:bold}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px}
+textarea{resize:vertical;min-height:80px}
+.primary{background:#1565c0;color:white;border:0;padding:12px 18px;border-radius:7px;cursor:pointer;margin-top:17px;font-weight:bold}
+.product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.product-card{border:1px solid #e0e7ef;border-radius:10px;padding:12px}
+.product-card img{width:100%;height:150px;object-fit:cover;border-radius:8px}
+.product-card h3{margin:10px 0}
+.product-card p{margin:7px 0;overflow-wrap:anywhere}
+.delete{background:#dc2626;color:white;border:0;padding:9px;border-radius:6px;cursor:pointer;margin-top:10px}
+.item{border-bottom:1px solid #ddd;padding:15px 0;overflow-wrap:anywhere}
+#notice{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#15803d;color:white;padding:15px 22px;border-radius:8px;z-index:5;max-width:90%}
+@media(max-width:850px){.layout{flex-direction:column}.sidebar{width:100%}.sidebar button{width:auto;display:inline-block}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:550px){main{padding:14px}.stats{grid-template-columns:1fr}.product-grid{grid-template-columns:1fr}header{padding:17px}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🍦 Deva M Mart — Seller Dashboard</h1>
+<span id="sellerHeader"></span>
+</header>
+
+<div id="notice" role="status" aria-live="polite"></div>
+
+<div class="layout">
+<aside class="sidebar">
+<h3>Seller Menu</h3>
+<button onclick="showSection('home')">🏠 Dashboard Home</button>
+<button onclick="showSection('profile')">👤 My Profile</button>
+<button onclick="showSection('add')">➕ Add Ice Cream</button>
+<button onclick="showSection('products')">🍨 My Products</button>
+<button onclick="showSection('orders')">📦 Customer Orders</button>
+<button onclick="showSection('sales')">💰 Sales Details</button>
+<button onclick="logout()">🚪 Logout</button>
+</aside>
+
+<main>
+<div class="welcome" id="welcome">
+<h2 id="welcomeTitle">Welcome, Seller!</h2>
+<p>Manage your ice cream products and view your shop activity.</p>
+</div>
+
+<section id="home" class="section" style="display:block">
+<div class="stats">
+<div class="stat"><h3>My Products</h3><p id="productCount">0</p></div>
+<div class="stat"><h3>Customer Orders</h3><p id="orderCount">0</p></div>
+<div class="stat"><h3>Total Sales</h3><p id="salesTotal">₹0</p></div>
+</div>
+<h2>Seller Dashboard</h2>
+<p>Use the menu to add products, manage your ice cream list, and view order information.</p>
+</section>
+
+<section id="profile" class="section">
+<h2>👤 My Profile</h2>
+<div id="profileDetails"></div>
+</section>
+
+<section id="add" class="section">
+<h2>➕ Add New Ice Cream</h2>
+<form id="productForm" autocomplete="off">
+<label for="productName">Ice Cream Name</label>
+<input id="productName" type="text" placeholder="Example: Chocolate Ice Cream" required>
+
+<label for="productPrice">Price (₹)</label>
+<input id="productPrice" type="number" min="1" step="0.01" placeholder="Enter price" required>
+
+<label for="productImage">Image URL (optional)</label>
+<input id="productImage" type="url" placeholder="https://example.com/icecream.jpg">
+
+<label for="productDescription">Description</label>
+<textarea id="productDescription" placeholder="Enter product details"></textarea>
+
+<button class="primary" type="submit">Add Ice Cream</button>
+</form>
+</section>
+
+<section id="products" class="section">
+<h2>🍨 My Products</h2>
+<div id="productList" class="product-grid"></div>
+</section>
+
+<section id="orders" class="section">
+<h2>📦 Customer Orders</h2>
+<div id="orderList"></div>
+</section>
+
+<section id="sales" class="section">
+<h2>💰 Sales Details</h2>
+<div id="salesDetails"></div>
+</section>
+</main>
+</div>
+
+<script>
+let seller=JSON.parse(localStorage.getItem("devaMMartCurrentUser")||"null");
+
+if(!seller||seller.role!=="seller"){
+alert("Please login as a Seller first!");
+window.location.replace("login.html");
+}
+
+const sellerEmail=(seller?.sellerEmail||"").toLowerCase();
+
+function key(type){
+return "devaMMartSeller_"+sellerEmail+"_"+type;
+}
+
+function read(type){
+try{return JSON.parse(localStorage.getItem(key(type)))||[]}
+catch(error){return []}
+}
+
+function write(type,data){
+localStorage.setItem(key(type),JSON.stringify(data));
+}
+
+function notify(text){
+const notice=document.getElementById("notice");
+notice.textContent=text;
+notice.style.display="block";
+clearTimeout(window.noticeTimer);
+window.noticeTimer=setTimeout(()=>notice.style.display="none",2500);
+}
+
+document.getElementById("sellerHeader").textContent=seller?.sellerName||"Seller";
+document.getElementById("welcomeTitle").textContent="Welcome, "+(seller?.sellerName||"Seller")+"! 🍦";
+
+function showSection(name){
+document.getElementById("welcome").style.display=name==="home"?"block":"none";
+document.querySelectorAll("main .section").forEach(section=>{
+section.style.display=section.id===name?"block":"none";
+});
+if(name==="home")updateStats();
+if(name==="profile")renderProfile();
+if(name==="products")renderProducts();
+if(name==="orders")renderOrders();
+if(name==="sales")renderSales();
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderProfile(){
+const box=document.getElementById("profileDetails");
+box.replaceChildren();
+[
+["Seller Name",seller.sellerName],
+["Email",seller.sellerEmail]
+].forEach(([label,value])=>{
+const p=document.createElement("p");
+p.style.margin="12px 0";
+const strong=document.createElement("strong");
+strong.textContent=label+": ";
+p.append(strong,document.createTextNode(value||"Not provided"));
+box.appendChild(p);
+});
+}
+
+document.getElementById("productForm").addEventListener("submit",function(event){
+event.preventDefault();
+if(!this.reportValidity())return;
+
+const name=document.getElementById("productName").value.trim();
+const price=Number(document.getElementById("productPrice").value);
+const image=document.getElementById("productImage").value.trim();
+const description=document.getElementById("productDescription").value.trim();
+
+if(!name||!Number.isFinite(price)||price<=0){
+notify("Enter a valid product name and price.");
+return;
+}
+
+const products=read("products");
+products.push({
+id:Date.now(),
+name:name,
+price:price,
+image:image,
+description:description
+});
+write("products",products);
+
+this.reset();
+notify("Ice cream added successfully! 🍦");
+updateStats();
+});
+
+function renderProducts(){
+const list=document.getElementById("productList");
+list.replaceChildren();
+const products=read("products");
+
+if(!products.length){
+list.textContent="You have not added any products yet.";
+return;
+}
+
+products.forEach(product=>{
+const card=document.createElement("div");
+card.className="product-card";
+
+if(product.image){
+const img=document.createElement("img");
+img.src=product.image;
+img.alt=product.name;
+img.onerror=function(){this.style.display="none"};
+card.appendChild(img);
+}
+
+const title=document.createElement("h3");
+title.textContent=product.name;
+
+const price=document.createElement("p");
+price.textContent="Price: ₹"+product.price;
+
+const description=document.createElement("p");
+description.textContent=product.description||"No description";
+
+const del=document.createElement("button");
+del.className="delete";
+del.textContent="Delete Product";
+del.onclick=()=>deleteProduct(product.id);
+
+card.append(title,price,description,del);
+list.appendChild(card);
+});
+}
+
+function deleteProduct(id){
+if(!confirm("Delete this ice cream?"))return;
+write("products",read("products").filter(product=>product.id!==id));
+renderProducts();
+updateStats();
+notify("Product deleted.");
+}
+
+function getOrders(){
+try{return JSON.parse(localStorage.getItem("devaMMartOrders"))||[]}
+catch(error){return []}
+}
+
+function renderOrders(){
+const list=document.getElementById("orderList");
+list.replaceChildren();
+const orders=getOrders();
+
+if(!orders.length){
+list.textContent="No customer orders available yet.";
+return;
+}
+
+orders.forEach(order=>{
+const row=document.createElement("div");
+row.className="item";
+const title=document.createElement("h3");
+title.textContent="Order: "+(order.orderId||order.id||"N/A");
+const details=document.createElement("p");
+details.textContent="Status: "+(order.status||"Order placed")+" | Total: ₹"+(order.total||0);
+row.append(title,details);
+list.appendChild(row);
+});
+}
+
+function renderSales(){
+const orders=getOrders();
+const total=orders.reduce((sum,order)=>sum+Number(order.total||0),0);
+document.getElementById("salesDetails").textContent=
+"Recorded order total: ₹"+total+". This is a demo summary; actual seller-specific sales require shared order data from a backend.";
+}
+
+function updateStats(){
+document.getElementById("productCount").textContent=read("products").length;
+const orders=getOrders();
+document.getElementById("orderCount").textContent=orders.length;
+document.getElementById("salesTotal").textContent=
+"₹"+orders.reduce((sum,order)=>sum+Number(order.total||0),0);
+}
+
+function logout(){
+localStorage.removeItem("devaMMartCurrentUser");
+window.location.href="login.html";
+}
+
+updateStats();
+</script>
+</body>
+</html>
