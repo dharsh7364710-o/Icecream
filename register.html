@@ -1,210 +1,279 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Deva M Mart - Register</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{min-height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#0d47a1,#42a5f5,#e3f2fd);padding:25px}
-.card{width:460px;background:white;border-radius:25px;padding:32px;box-shadow:0 15px 40px rgba(0,0,0,.25)}
-.logo{text-align:center;margin-bottom:22px}
-.icon{width:65px;height:65px;margin:auto;border-radius:50%;background:linear-gradient(135deg,#0d47a1,#42a5f5);display:flex;justify-content:center;align-items:center;font-size:30px}
-h1{margin-top:10px;color:#0d47a1}
-.sub{text-align:center;color:#777;margin-top:5px}
-h2{color:#17324d;margin:22px 0 15px}
-label{display:block;margin:12px 0 6px;font-weight:bold;color:#263238}
-input,select{width:100%;padding:13px;border:1px solid #c7d7e8;border-radius:11px;background:#f8fbff;outline:none}
-input:focus,select:focus{border-color:#1976d2;box-shadow:0 0 0 3px rgba(25,118,210,.12)}
-.btn{width:100%;padding:14px;margin-top:22px;border:0;border-radius:12px;background:linear-gradient(90deg,#0d47a1,#1976d2,#42a5f5);color:white;font-size:16px;font-weight:bold;cursor:pointer}
-#message{text-align:center;margin-top:14px;font-weight:bold}
-.bottom{text-align:center;margin-top:18px;color:#666}
-.bottom a{color:#1565c0;font-weight:bold;text-decoration:none}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#dbeafe,#93c5fd,#60a5fa);
+padding:25px 15px;
+}
+.container{
+width:100%;
+max-width:450px;
+background:white;
+padding:30px;
+border-radius:18px;
+box-shadow:0 8px 30px rgba(0,0,0,0.15);
+}
+.logo{
+text-align:center;
+font-size:30px;
+font-weight:bold;
+color:#1565c0;
+margin-bottom:8px;
+}
+.subtitle{
+text-align:center;
+color:#666;
+margin-bottom:25px;
+}
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#222;
+}
+label{
+display:block;
+font-weight:bold;
+margin:13px 0 6px;
+color:#333;
+}
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:15px;
+background:white;
+}
+input:focus,select:focus{
+border-color:#1976d2;
+outline:none;
+}
+button{
+width:100%;
+padding:13px;
+margin-top:22px;
+background:#1976d2;
+color:white;
+border:none;
+border-radius:8px;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+}
+button:hover{
+background:#0d47a1;
+}
+.role-fields{
+display:none;
+}
+.message{
+display:none;
+margin-top:15px;
+padding:12px;
+border-radius:8px;
+text-align:center;
+font-weight:bold;
+}
+.success{
+display:block;
+background:#dcfce7;
+color:#166534;
+}
+.error{
+display:block;
+background:#fee2e2;
+color:#b91c1c;
+}
+.login{
+text-align:center;
+margin-top:18px;
+color:#555;
+}
+.login a{
+color:#1565c0;
+font-weight:bold;
+text-decoration:none;
+}
 </style>
 </head>
-
 <body>
+<div class="container">
 
-<div class="card">
+<div class="logo">🍦 Deva M Mart</div>
+<p class="subtitle">Your Favourite Ice Cream Store</p>
+<h2>Create Account</h2>
 
-<div class="logo">
-<div class="icon">🍦</div>
-<h1>Deva M Mart</h1>
-<p class="sub">Create your account</p>
-</div>
+<form id="registerForm" autocomplete="off">
 
-<h2>Registration</h2>
-
-<label>Account Type</label>
-<select id="accountType" onchange="showFields()">
-<option value="buyer">👤 Buyer</option>
-<option value="seller">🏪 Seller</option>
-<option value="admin">🛠️ Admin</option>
+<label for="role">Select Your Role</label>
+<select id="role" name="role" required>
+<option value="" selected disabled>-- Select Role --</option>
+<option value="buyer">Buyer</option>
+<option value="seller">Seller</option>
+<option value="admin">Admin</option>
 </select>
 
-<div id="fields"></div>
+<div id="buyerFields" class="role-fields">
+<label for="buyerName">Buyer Name</label>
+<input type="text" id="buyerName" name="buyerName" placeholder="Enter your name" autocomplete="off">
 
-<button class="btn" onclick="register()">Create Account</button>
+<label for="buyerEmail">Email</label>
+<input type="email" id="buyerEmail" name="buyerEmail" placeholder="Enter your email" autocomplete="off" autocapitalize="none">
 
-<p id="message"></p>
+<label for="buyerPassword">Password</label>
+<input type="password" id="buyerPassword" name="buyerPassword" placeholder="Create your password" autocomplete="new-password">
 
-<p class="bottom">
-Already have an account?
-<a href="login.html">Login</a>
-</p>
+<label for="buyerContact">Contact Number</label>
+<input type="tel" id="buyerContact" name="buyerContact" placeholder="Enter your contact number" maxlength="10" pattern="[0-9]{10}" autocomplete="off">
+</div>
+
+<div id="sellerFields" class="role-fields">
+<label for="sellerName">Seller Name</label>
+<input type="text" id="sellerName" name="sellerName" placeholder="Enter seller name" autocomplete="off">
+
+<label for="sellerEmail">Email</label>
+<input type="email" id="sellerEmail" name="sellerEmail" placeholder="Enter your email" autocomplete="off" autocapitalize="none">
+
+<label for="sellerPassword">Password</label>
+<input type="password" id="sellerPassword" name="sellerPassword" placeholder="Create your password" autocomplete="new-password">
+</div>
+
+<div id="adminFields" class="role-fields">
+<label for="adminName">Admin Name</label>
+<input type="text" id="adminName" name="adminName" placeholder="Enter admin name" autocomplete="off">
+
+<label for="adminEmail">Email</label>
+<input type="email" id="adminEmail" name="adminEmail" placeholder="Enter your email" autocomplete="off" autocapitalize="none">
+
+<label for="adminPassword">Password</label>
+<input type="password" id="adminPassword" name="adminPassword" placeholder="Create your password" autocomplete="new-password">
+
+<label for="shopName">Shop Name</label>
+<input type="text" id="shopName" name="shopName" placeholder="Enter your shop name" autocomplete="off">
+</div>
+
+<button type="submit">Register</button>
+
+<div id="message" class="message"></div>
+
+</form>
+
+<p class="login">Already have an account? <a href="login.html">Login</a></p>
 
 </div>
 
 <script>
+const roleSelect=document.getElementById("role");
+const form=document.getElementById("registerForm");
+const message=document.getElementById("message");
 
-function showFields(){
-
-let type=document.getElementById("accountType").value;
-let fields=document.getElementById("fields");
-
-if(type==="buyer"){
-fields.innerHTML=`
-<label>Name</label>
-<input type="text" id="name" placeholder="Enter your name">
-
-<label>Email</label>
-<input type="email" id="email" placeholder="Enter your email">
-
-<label>Phone Number</label>
-<input type="tel" id="phone" placeholder="Enter phone number">
-
-<label>Password</label>
-<input type="password" id="password" placeholder="Create password">
-
-<label>Confirm Password</label>
-<input type="password" id="confirm" placeholder="Confirm password">
-`;
-}
-
-if(type==="seller"){
-fields.innerHTML=`
-<label>Seller Name</label>
-<input type="text" id="name" placeholder="Enter seller name">
-
-<label>Email</label>
-<input type="email" id="email" placeholder="Enter seller email">
-
-<label>Phone Number</label>
-<input type="tel" id="phone" placeholder="Enter phone number">
-
-<label>Shop Name</label>
-<input type="text" id="shop" placeholder="Enter shop name">
-
-<label>Password</label>
-<input type="password" id="password" placeholder="Create password">
-
-<label>Confirm Password</label>
-<input type="password" id="confirm" placeholder="Confirm password">
-`;
-}
-
-if(type==="admin"){
-fields.innerHTML=`
-<label>Admin Name</label>
-<input type="text" id="name" placeholder="Enter admin name">
-
-<label>Email</label>
-<input type="email" id="email" placeholder="Enter admin email">
-
-<label>Admin ID</label>
-<input type="text" id="adminId" placeholder="Enter admin ID">
-
-<label>Password</label>
-<input type="password" id="password" placeholder="Create password">
-
-<label>Confirm Password</label>
-<input type="password" id="confirm" placeholder="Confirm password">
-`;
-}
-
-}
-
-function register(){
-
-let type=document.getElementById("accountType").value;
-let name=document.getElementById("name").value.trim();
-let email=document.getElementById("email").value.trim();
-let password=document.getElementById("password").value;
-let confirm=document.getElementById("confirm").value;
-let message=document.getElementById("message");
-
-if(name===""||email===""||password===""||confirm===""){
-message.style.color="red";
-message.innerHTML="Please fill all required details!";
-return;
-}
-
-if(password!==confirm){
-message.style.color="red";
-message.innerHTML="Passwords do not match!";
-return;
-}
-
-let account={
-type:type,
-name:name,
-email:email,
-password:password
+const sections={
+buyer:document.getElementById("buyerFields"),
+seller:document.getElementById("sellerFields"),
+admin:document.getElementById("adminFields")
 };
 
-if(type==="buyer"){
+function clearFields(){
+Object.values(sections).forEach(section=>{
+section.querySelectorAll("input").forEach(input=>{
+input.value="";
+input.required=false;
+});
+});
+}
 
-let phone=document.getElementById("phone").value.trim();
+function updateFields(){
+clearFields();
 
-if(phone===""){
-message.style.color="red";
-message.innerHTML="Please enter phone number!";
+Object.values(sections).forEach(section=>{
+section.style.display="none";
+});
+
+message.className="message";
+message.textContent="";
+
+const selected=roleSelect.value;
+
+if(sections[selected]){
+sections[selected].style.display="block";
+
+sections[selected].querySelectorAll("input").forEach(input=>{
+input.required=true;
+});
+}
+}
+
+roleSelect.addEventListener("change",updateFields);
+
+form.addEventListener("submit",function(event){
+event.preventDefault();
+
+if(!form.checkValidity()){
+form.reportValidity();
 return;
 }
 
-account.phone=phone;
+const role=roleSelect.value;
+const user={role:role};
+
+const activeSection=sections[role];
+
+activeSection.querySelectorAll("input").forEach(input=>{
+user[input.name]=input.value.trim();
+});
+
+const emailField=role==="buyer"?"buyerEmail":role==="seller"?"sellerEmail":"adminEmail";
+
+let users=[];
+
+try{
+users=JSON.parse(localStorage.getItem("devaMMartUsers"))||[];
+}catch(error){
+users=[];
 }
 
-if(type==="seller"){
+const email=user[emailField].toLowerCase();
 
-let phone=document.getElementById("phone").value.trim();
-let shop=document.getElementById("shop").value.trim();
-
-if(phone===""||shop===""){
-message.style.color="red";
-message.innerHTML="Please fill seller details!";
+if(users.some(existing=>
+existing.role===role&&
+existing[emailField]&&
+existing[emailField].toLowerCase()===email
+)){
+message.className="message error";
+message.textContent="This email is already registered for this role!";
 return;
 }
 
-account.phone=phone;
-account.shop=shop;
-}
+users.push(user);
 
-if(type==="admin"){
+localStorage.setItem("devaMMartUsers",JSON.stringify(users));
 
-let adminId=document.getElementById("adminId").value.trim();
+message.className="message success";
+message.textContent="Registration Successful!";
 
-if(adminId===""){
-message.style.color="red";
-message.innerHTML="Please enter Admin ID!";
-return;
-}
+form.reset();
+clearFields();
 
-account.adminId=adminId;
-}
+Object.values(sections).forEach(section=>{
+section.style.display="none";
+});
 
-localStorage.setItem(type+"Account",JSON.stringify(account));
-
-message.style.color="green";
-message.innerHTML="Account created successfully! ✓";
-
-setTimeout(function(){
-window.location.href="login.html";
-},1000);
-
-}
-
-showFields();
-
+});
 </script>
-
+</div>
 </body>
 </html>
